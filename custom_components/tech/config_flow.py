@@ -49,11 +49,11 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         if user_input is not None:
             try:
                 info = await validate_input(self.hass, user_input)
-                controllers_names = ""
+                controllers = []
                 for controller in info["controllers"]:
-                    controllers_names += controller["version"] + " "
+                    controllers.append(controller["name"])
 
-                return self.async_create_entry(title=controllers_names, data=info)
+                return self.async_create_entry(title=f"{' | '.join(controllers)}", data=info)
             except CannotConnect:
                 errors["base"] = "cannot_connect"
             except InvalidAuth:
